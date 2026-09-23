@@ -1,0 +1,4 @@
+LIBRARY FolderSizeOverlay
+EXPORTS
+    DllGetClassObject PRIVATE
+    DllCanUnloadNow PRIVATE
