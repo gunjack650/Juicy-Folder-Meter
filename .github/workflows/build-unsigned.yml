@@ -1,0 +1,35 @@
+name: Build unsigned MSI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build MSI
+        shell: pwsh
+        run: ./BUILD-STORE-MSI.ps1 -Version 1.1.0
+
+      - name: Upload unsigned MSI
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuicyFolderMeter-unsigned-msi
+          path: dist/JuicyFolderMeter_1.1.0_x64_UNSIGNED.msi
+          if-no-files-found: error
