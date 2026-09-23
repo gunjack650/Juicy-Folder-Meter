@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package
+      Id="JuicyApps.JuicyFolderMeter"
+      Name="Juicy Folder Meter"
+      Manufacturer="Juicy Apps"
+      Version="$(ProductVersion)"
+      Language="1033"
+      InstallerVersion="500"
+      Scope="perMachine"
+      Compressed="yes">
+
+    <!-- Store installs MSI packages silently with /qn. Never allow MSI to reboot the PC by itself. -->
+    <Property Id="REBOOT" Value="ReallySuppress" />
+    <Property Id="ARPURLINFOABOUT" Value="https://juicy-apps.com" />
+
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <!-- A small product icon for Apps & Features. -->
+    <Icon Id="ProductIcon" SourceFile="$(ProjectRoot)\native\orange.ico" />
+    <Property Id="ARPPRODUCTICON" Value="ProductIcon" />
+
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="JuicyAppsFolder" Name="Juicy Apps">
+        <Directory Id="ProductFolder" Name="Juicy Folder Meter">
+          <!-- Versioned folder avoids overwriting a shell-extension DLL that Explorer may still have loaded. -->
+          <Directory Id="INSTALLFOLDER" Name="$(ProductVersion)" />
+        </Directory>
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder" />
+
+    <Feature Id="Main" Title="Juicy Folder Meter" Level="1">
+      <Component Id="MainExecutableComponent" Directory="INSTALLFOLDER" Bitness="always64">
+        <File Id="FolderSizeMeterExe" Source="$(PayloadDir)\FolderSizeMeter.exe" KeyPath="yes">
+          <Shortcut
+              Id="StartMenuShortcut"
+              Directory="ProgramMenuFolder"
+              Name="Juicy Folder Meter"
+              Description="Shows folder-size status and optional Explorer icon overlays."
+              WorkingDirectory="INSTALLFOLDER"
+              Advertise="no" />
+        </File>
+      </Component>
+
+      <Component Id="OverlayComponent" Directory="INSTALLFOLDER" Bitness="always64">
+        <File Id="FolderSizeOverlayDll" Source="$(PayloadDir)\FolderSizeOverlay.dll" KeyPath="yes" />
+
+        <!-- Native in-process COM shell overlay classes. -->
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Classes\CLSID\{7B8EF830-13BA-4A69-B158-296714431001}" Type="string" Value="Juicy Folder Meter Orange" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Classes\CLSID\{7B8EF830-13BA-4A69-B158-296714431001}\InprocServer32" Type="string" Value="[#FolderSizeOverlayDll]" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Classes\CLSID\{7B8EF830-13BA-4A69-B158-296714431001}\InprocServer32" Name="ThreadingModel" Type="string" Value="Apartment" />
+
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Classes\CLSID\{7B8EF830-13BA-4A69-B158-296714431002}" Type="string" Value="Juicy Folder Meter Red" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Classes\CLSID\{7B8EF830-13BA-4A69-B158-296714431002}\InprocServer32" Type="string" Value="[#FolderSizeOverlayDll]" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Classes\CLSID\{7B8EF830-13BA-4A69-B158-296714431002}\InprocServer32" Name="ThreadingModel" Type="string" Value="Apartment" />
+
+        <!-- Keep these internal names unchanged because the app checks them. -->
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\FolderSizeMeter Orange" Type="string" Value="{7B8EF830-13BA-4A69-B158-296714431001}" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\FolderSizeMeter Red" Type="string" Value="{7B8EF830-13BA-4A69-B158-296714431002}" />
+      </Component>
+    </Feature>
+  </Package>
+</Wix>

@@ -1,0 +1,23 @@
+<artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
+  <parameters>
+    <parameter name="version" required="true" />
+  </parameters>
+  <msi-file path="JuicyFolderMeter_${version}_x64_UNSIGNED.msi">
+    <pe-file path="FolderSizeMeter.exe"
+             product-name="Juicy Folder Meter"
+             product-version="${version}"
+             file-version="${version}.0"
+             company-name="Juicy Apps">
+      <authenticode-sign description="Juicy Folder Meter" description-url="https://juicy-apps.com" />
+    </pe-file>
+    <pe-file path="FolderSizeOverlay.dll"
+             product-name="Juicy Folder Meter"
+             product-version="${version}"
+             file-version="${version}.0"
+             company-name="Juicy Apps"
+             original-filename="FolderSizeOverlay.dll">
+      <authenticode-sign description="Juicy Folder Meter" description-url="https://juicy-apps.com" />
+    </pe-file>
+    <authenticode-sign description="Juicy Folder Meter" description-url="https://juicy-apps.com" />
+  </msi-file>
+</artifact-configuration>
