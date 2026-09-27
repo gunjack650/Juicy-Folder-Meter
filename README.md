@@ -2,7 +2,11 @@
 
 A free Windows 11 utility that shows folder-size status without replacing normal folder icons. The tray application calculates folder sizes and a small native Explorer shell extension can display orange/red status markers where Windows has an available icon-overlay slot.
 
-![Settings preview](Settings-preview.png)
+## Screenshots
+
+![Juicy Folder Meter](Screenshot%20-%20typical%20window.png)
+
+![Options](Screenshot%20-%20options%20window.png)
 
 ## What it does
 
@@ -29,26 +33,3 @@ Run:
 
 ```powershell
 ./BUILD-STORE-MSI.ps1 -Version 1.1.0
-```
-
-or double-click `BUILD-STORE-MSI.cmd` on a configured Windows development PC.
-
-The unsigned MSI is created under `dist/`. Public Store releases are intended to be signed through SignPath after an approved open-source signing setup.
-
-## Architecture
-
-The UI/scanner is C# / .NET 8 WinForms. The Explorer overlay component is a native x64 C++ COM DLL implementing `IShellIconOverlayIdentifier`. Communication is through a session-local shared-memory cache. See [technical notes](docs/TECHNICAL_NOTES.md) for implementation details and limitations.
-
-## Privacy
-
-See [PRIVACY.md](PRIVACY.md).
-
-## Code signing policy
-
-See [CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md).
-
-Free code signing provided by SignPath.io, certificate by SignPath Foundation, **if and after the project is accepted by SignPath Foundation**.
-
-## License
-
-MIT License. See [LICENSE](LICENSE).
